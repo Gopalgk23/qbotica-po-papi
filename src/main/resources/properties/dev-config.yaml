@@ -1,0 +1,13 @@
+https:
+  host: "0.0.0.0"
+  port: "8082"
+  
+aws:
+  accesskey: "![3IIN7u56LiKQhZz74L0BmW+yUZ6thrAZN60v0hH9LWE=]"
+  secretkey: "![yrsia1GvT4v/f8+49s9JZViHh8/cXKEfJRZh9lcrqBb32Xsp38v/WB+tJIgC9UnG]"
+  regionendpoint: "us-east-1"
+ 
+  sqs:
+    arn: "arn:aws:sqs:us-east-1:060795906844:qbotica-qsq-process"
+    url: "https://sqs.us-east-1.amazonaws.com/060795906844/qbotica-qsq-process"
+functionalIdentifier: "qbotica-po"

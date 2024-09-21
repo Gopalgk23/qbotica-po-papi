@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<flow name="sourceFlow" doc:id="ec33d33e-0663-4233-af7e-45d3360447be" >
+		<sqs:receivemessages doc:name="Receive messages" doc:id="5f69b6f4-f912-42cf-8b51-f77383d3440d" config-ref="Amazon_SQS_Configuration" queueUrl="${aws.sqs.url}" visibilityTimeoutUnit="MINUTES"/>
+		<ee:transform doc:name="qbotica-po-papi-Receive meassagesflow-logvar" doc:id="8c095f6c-5f67-4053-9823-faadbdd7a4f9" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="logvar" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  appName: Mule::p('app.name'),
+  description :"starting of qbotica-po-papi-flow",
+  functionalIdentifier: Mule::p('functionalIdentifier'),
+  correlationId: correlationId,
+  businessIdentifier1: "message id ",
+  businessIdentifier1Value: attributes.'sqs.message.id'
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="cc94dbe5-1ca2-4cdf-becd-f9dadc51a405" message="#[vars.logvar]"/>
+		<set-variable value="#[%dw 2.0&#10;output application/json&#10;---&#10;read( payload, 'application/json')]" doc:name="sqs data" doc:id="3ffbd3fa-16aa-4ae8-b511-3db6d9fa5197" variableName="sqsdata" />
+		<ee:transform doc:name="map object" doc:id="67d17657-85d9-4050-8e9e-5e0407106266">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.sqsdata map {
+customerNo: $."CUSTOMER NO",
+CUSTOMERPONO: $."CUSTOMER PO NO",
+ECTPONUMBER: $."ECT PO NUMBER",
+EXPECTEDSHIPDATE: $."EXPECTED SHIP DATE",
+DockDate: now() as String {format: "yyyy-MM-dd"},
+OrderDate: $."Order Date",
+SHIPTONAME: $."SHIP TO NAME",
+SHIPTOADDRESS: $."SHIP TO ADDRESS",
+POLINENO: $."PO LINE NO",
+QUANTITYORDERED:$."QUANTITY ORDERED",
+UNITPRICE:$."UNIT PRICE",
+CUSTOMERPARTNO:$."CUSTOMER PART NO",
+COPELANDMODELNO:$."COPELAND MODEL NO",
+ITEMDESCRIPTION: $."ITEM DESCRIPTION",
+REJECTEDMESSAGE: $."REJECTED MESSAGE",
+STATUS_FLAG :"N"
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="e6d09138-da62-4d20-8a65-36a72d78871f" name="source_sqsdata"/>
+		<ee:transform doc:name="qbotica-po-papi-Receive meassagesflow-logvar1" doc:id="41eefdd2-6ed8-48c7-bfb9-4db2265935aa">
+			<ee:message />
+			<ee:variables>
+				<ee:set-variable variableName="logvar"><![CDATA[%dw 2.0
+output application/json
+---
+{
+  appName: Mule::p('app.name'),
+  description :"ending of qbotica-po-papi-flow",
+  functionalIdentifier: Mule::p('functionalIdentifier'),
+  correlationId:vars.logvar.correlationId,
+  businessIdentifier1: "message id ",
+  businessIdentifier1Value: attributes.'sqs.message.id'
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="logvar" doc:id="dfe40930-4211-482a-899b-a1793edf41e5" message="#[vars.logvar]" />
+		<logger level="INFO" doc:name="Logger" doc:id="d2d39d5c-662c-4851-b0f0-ab6b7318ab00" message="#[payload]"/>
+		<error-handler >
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7cee2d6a-8909-4972-9c98-1959cf225f83" >
+				<ee:transform doc:name="qbotica-po-papi-Receive meassagesflow-logvar" doc:id="98853fcf-aeae-4ec8-9766-92fe05a59623" >
+					<ee:message />
+					<ee:variables >
+						<ee:set-variable variableName="logvar" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  appName: Mule::p('app.name'),
+  description :"starting of qbotica-po-papi-flow",
+  functionalIdentifier: Mule::p('functionalIdentifier'),
+  correlationId: vars.logvar.correlationId,
+  businessIdentifier1: "message id ",
+  businessIdentifier1Value: attributes.'sqs.message.id',
+   error:
+  {
+  	Type: error.errorType.identifier,
+    Details: "unable to send message to sqs : " ++ p('secure::aws.sqs.url'),
+    Description: error.detailedDescription
+    
+   }
+  
+  
+}]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<logger level="INFO" doc:name="logvar1" doc:id="cea4f438-1bee-47e9-b1c1-41b2688e3efb" message="#[vars.logvar]" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
+	<sub-flow name="source_sqsdata" doc:id="9bf04d05-183c-4964-ae7e-956a2db8076a" >
+		<ee:transform doc:name="groupBy" doc:id="3b94e0f6-3427-4795-9d2b-0e5ead849d4f">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload groupBy () -> $.customerNo]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="5380d4a6-8cda-4883-b582-9e1468a35980" collection="#[payload]">
+			<logger level="INFO" doc:name="Logger" doc:id="de31c9a2-1f76-48e3-a057-50f453e31cd4" message="#[payload]" />
+			<flow-ref doc:name="Flow Reference" doc:id="9fe09bfa-e34f-4fcc-9705-684856299643" name="targateSub_Flow" />
+		</foreach>
+	</sub-flow>
+</mule>

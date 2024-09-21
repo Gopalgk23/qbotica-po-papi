@@ -1,0 +1,9 @@
+%dw 2.0
+
+type auto_be501ce1_787c_498d_bd81_0877b60459b2_Input_Attributes = { _?: java_lang_Object }
+type java_lang_Object = {|  |} {"typeAlias": "Object",
+"class": "java.lang.Object",
+"typeId": "java.lang.Object"}
+
+
+

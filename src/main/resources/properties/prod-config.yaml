@@ -1,0 +1,16 @@
+http:
+  host: "0.0.0.0"
+  port: "8081"
+  
+aws:
+  accesskey: "![ZL8Y5a+jJLBkPuCdDVKyTHNjqk05/gelqJNCmfRzQyc=]"
+  secretkey: "![JEiETOOJk+ESogyRqFaUlBAAlYmEhl2eucFSshgvuSoNAxsOjBTjaYnvVqyJ4j1g]"
+  regionendpoint: "us-east-1"
+  s3:
+    bucketname: "qbotica-processed"
+  putobject:
+    bucketname: "qbotica-backup"
+  sqs:
+    arn: "arn:aws:sqs:us-east-1:010526249169:qboticaprocessqueue"
+    url: "![MtOMsRXktbRrewXz7ek0RA/zOyAzHw6mqKyS15sQchFpKnDG5ykWqCkB/00SFKyLGiO38E864l+7I3RZXhCZWZQml09wT6yasULOEMAL43w=]"
+functionalIdentifier: "qbotica-po"
