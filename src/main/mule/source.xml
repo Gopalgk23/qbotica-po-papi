@@ -116,5 +116,6 @@ payload groupBy () -> $.customerNo]]></ee:set-payload>
 			<logger level="INFO" doc:name="Logger" doc:id="de31c9a2-1f76-48e3-a057-50f453e31cd4" message="#[payload]" />
 			<flow-ref doc:name="Flow Reference" doc:id="9fe09bfa-e34f-4fcc-9705-684856299643" name="targateSub_Flow" />
 		</foreach>
+		<logger level="INFO" doc:name="Logger" doc:id="8664e9b2-3d13-4897-86c0-24d106a4238e" message='"end the process"'/>
 	</sub-flow>
 </mule>
