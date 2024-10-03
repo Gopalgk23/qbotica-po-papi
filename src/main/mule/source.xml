@@ -57,59 +57,16 @@ STATUS_FLAG :"N"
 		<ee:transform doc:name="qbotica-po-papi-Receive meassagesflow-logvar1" doc:id="41eefdd2-6ed8-48c7-bfb9-4db2265935aa">
 			<ee:message />
 			<ee:variables>
-				<ee:set-variable variableName="logvar"><![CDATA[%dw 2.0
-output application/json
----
-{
-  appName: Mule::p('app.name'),
-  description :"ending of qbotica-po-papi-flow",
-  functionalIdentifier: Mule::p('functionalIdentifier'),
-  correlationId:vars.logvar.correlationId,
-  businessIdentifier1: "message id ",
-  businessIdentifier1Value: attributes.'sqs.message.id'
-}]]></ee:set-variable>
+				<ee:set-variable resource="dwl/logvarEnd.dwl" variableName="logvar" />
 			</ee:variables>
 		</ee:transform>
 		<logger level="INFO" doc:name="logvar" doc:id="dfe40930-4211-482a-899b-a1793edf41e5" message="#[vars.logvar]" />
 		<logger level="INFO" doc:name="Logger" doc:id="d2d39d5c-662c-4851-b0f0-ab6b7318ab00" message="#[payload]"/>
-		<error-handler >
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7cee2d6a-8909-4972-9c98-1959cf225f83" >
-				<ee:transform doc:name="qbotica-po-papi-Receive meassagesflow-logvar" doc:id="98853fcf-aeae-4ec8-9766-92fe05a59623" >
-					<ee:message />
-					<ee:variables >
-						<ee:set-variable variableName="logvar" ><![CDATA[%dw 2.0
-output application/json
----
-{
-  appName: Mule::p('app.name'),
-  description :"starting of qbotica-po-papi-flow",
-  functionalIdentifier: Mule::p('functionalIdentifier'),
-  correlationId: vars.logvar.correlationId,
-  businessIdentifier1: "message id ",
-  businessIdentifier1Value: attributes.'sqs.message.id',
-   error:
-  {
-  	Type: error.errorType.identifier,
-    Details: "unable to send message to sqs : " ++ p('secure::aws.sqs.url'),
-    Description: error.detailedDescription
-    
-   }
-  
-  
-}]]></ee:set-variable>
-					</ee:variables>
-				</ee:transform>
-				<logger level="INFO" doc:name="logvar1" doc:id="cea4f438-1bee-47e9-b1c1-41b2688e3efb" message="#[vars.logvar]" />
-			</on-error-propagate>
-		</error-handler>
 	</flow>
 	<sub-flow name="source_sqsdata" doc:id="9bf04d05-183c-4964-ae7e-956a2db8076a" >
 		<ee:transform doc:name="groupBy" doc:id="3b94e0f6-3427-4795-9d2b-0e5ead849d4f">
 			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-payload groupBy () -> $.customerNo]]></ee:set-payload>
+				<ee:set-payload resource="dwl/groupby.dwl" />
 			</ee:message>
 		</ee:transform>
 		<foreach doc:name="For Each" doc:id="5380d4a6-8cda-4883-b582-9e1468a35980" collection="#[payload]">

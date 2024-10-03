@@ -24,6 +24,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
     </http:listener-config>
     <apikit:config name="qbotica-po-papi-config" api="qbotica-po-papi.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
 	<global-property doc:name="Global Property" doc:id="9ddc93a3-8b73-4c6f-8e61-452266667812" name="env" value="dev" />
-	<global-property doc:name="Global Property" doc:id="f68734e4-77ef-443f-9882-f7edcd0d15c1" name="securekey" value="gopal12345678910"/>	
+	<global-property doc:name="Global Property" doc:id="f68734e4-77ef-443f-9882-f7edcd0d15c1" name="securekey" value="gopal12345678910"/>
+	<configuration doc:name="Configuration" doc:id="75c4b4d4-862c-48c3-b642-6cacbcdd8f25" defaultErrorHandler-ref="gehError_Handler" />	
 	
 </mule>
