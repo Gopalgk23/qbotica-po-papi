@@ -124,43 +124,13 @@ output application/json
         <ee:transform doc:name="qbotica-po-papi-Receive meassagesflow-logvar" doc:id="dddeed56-df41-4d41-89cd-7871c43f1af1">
 			<ee:message />
 			<ee:variables>
-				<ee:set-variable variableName="logvar"><![CDATA[%dw 2.0
-output application/json
----
-{
-  appName: Mule::p('app.name'),
-  description :"starting of reprocess qbotica-po-papi-config",
-  functionalIdentifier: Mule::p('functionalIdentifier'),
-  correlationId: correlationId,
-  businessIdentifier1: "message id ",
-  businessIdentifier1Value: attributes.'sqs.message.id'
-}]]></ee:set-variable>
+				<ee:set-variable resource="dwl/logvarStart.dwl" variableName="logvar" />
 			</ee:variables>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logg _var" doc:id="2c1f06b3-6cb9-457a-847e-6392104ebc75" message="#[vars.logvar]" />
 		<ee:transform doc:name="map object" doc:id="61fe9599-3a21-4a83-9609-0586b42de23d">
 			<ee:message>
-				<ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-payload map {
-customerNo: $."CUSTOMER NO",
-CUSTOMERPONO: $."CUSTOMER PO NO",
-ECTPONUMBER: $."ECT PO NUMBER",
-EXPECTEDSHIPDATE: $."EXPECTED SHIP DATE",
-DockDate: now() as String {format: "yyyy-MM-dd"},
-OrderDate: $."Order Date",
-SHIPTONAME: $."SHIP TO NAME",
-SHIPTOADDRESS: $."SHIP TO ADDRESS",
-POLINENO: $."PO LINE NO",
-QUANTITYORDERED:$."QUANTITY ORDERED",
-UNITPRICE:$."UNIT PRICE",
-CUSTOMERPARTNO:$."CUSTOMER PART NO",
-COPELANDMODELNO:$."COPELAND MODEL NO",
-ITEMDESCRIPTION: $."ITEM DESCRIPTION",
-REJECTEDMESSAGE: $."REJECTED MESSAGE",
-STATUS_FLAG :"R"
-}]]></ee:set-payload>
+				<ee:set-payload resource="dwl/mapobject.dwl" />
 			</ee:message>
 			<ee:variables />
 		</ee:transform>
@@ -168,17 +138,7 @@ STATUS_FLAG :"R"
 		<ee:transform doc:name="qbotica-po-papi-Receive meassagesflow-logvar1" doc:id="e4e6d902-175d-4f56-8a8d-baf3e1db31c8" >
 			<ee:message />
 			<ee:variables >
-				<ee:set-variable variableName="logvar" ><![CDATA[%dw 2.0
-output application/json
----
-{
-  appName: Mule::p('app.name'),
-  description :"ending of reprocess qbotica-po-papi-config",
-  functionalIdentifier: Mule::p('functionalIdentifier'),
-  correlationId: vars.logvar.correlationId,
-  businessIdentifier1: "message id ",
-  businessIdentifier1Value: attributes.'sqs.message.id'
-}]]></ee:set-variable>
+				<ee:set-variable resource="dwl/logvarEnd.dwl" variableName="logvar" />
 			</ee:variables>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logg _var1" doc:id="2f460063-2aaf-45eb-8717-446d49117aba" message="#[vars.logvar]" />

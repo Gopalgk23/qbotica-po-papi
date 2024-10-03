@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="gehError_Handler" doc:id="6455893d-c2d1-4333-a980-e0be4b425270" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d45e5b16-d5cb-4dde-a9ad-5155d7619eb5" type="ANY">
+			<ee:transform doc:name="qbotica-po-papi-Receive meassagesflow-logvar" doc:id="8a90bd9e-bca8-4cd6-aae2-17de80beec5e" >
+				<ee:message />
+				<ee:variables >
+					<ee:set-variable resource="dwl/logvarError.dwl" variableName="logvar" />
+				</ee:variables>
+			</ee:transform>
+			<logger level="INFO" doc:name="logvar" doc:id="2b964b88-cd21-4ffd-99f1-65082944ad6b" message="#[vars.logvar]" />
+		</on-error-propagate>
+	</error-handler>
+</mule>
