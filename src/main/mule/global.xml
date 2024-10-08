@@ -12,11 +12,18 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
 	<configuration-properties doc:name="Configuration properties" doc:id="01bb56b2-bc88-4b19-8752-3e1b68dd0aac" file="properties/${env}-config.yaml" />
 	<sqs:config name="Amazon_SQS_Configuration" doc:name="Amazon SQS Configuration" doc:id="f29024e9-1149-4058-8491-17fe60478b9b" >
-		<sqs:basic-connection testQueueArn="${aws.sqs.arn}" accessKey="${secure::aws.accesskey}" secretKey="${secure::aws.secretkey}" region="${aws.regionendpoint}"/>
+		<sqs:basic-connection testQueueArn="${aws.sqs.arn}" accessKey="${secure::aws.accesskey}" secretKey="${secure::aws.secretkey}" region="${aws.regionendpoint}">
+			<reconnection >
+				<reconnect frequency="${reconnection.freq}" count="${reconnection.reconnectionattempts}" />
+			</reconnection>
+		</sqs:basic-connection>
 	</sqs:config>
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="008448d3-1cf2-43cc-b51c-ecde59c77804" file="properties/${env}-config.yaml" key="${securekey}" />
 	<http:listener-config name="qbotica-po-papi-httpListenerConfig">
         <http:listener-connection host="${https.host}" port="${https.port}" protocol="HTTPS">
+			<reconnection >
+				<reconnect frequency="${reconnection.freq}" count="${reconnection.reconnectionattempts}" />
+			</reconnection>
 			<tls:context >
 				<tls:key-store type="jks" path="certificate/serverkeystore.jks" alias="myserver" keyPassword="keypwd" password="storepwd" />
 			</tls:context>

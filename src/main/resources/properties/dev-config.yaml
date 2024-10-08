@@ -10,4 +10,14 @@ aws:
   sqs:
     arn: "arn:aws:sqs:us-east-1:060795906844:qbotica-qsq-process"
     url: "https://sqs.us-east-1.amazonaws.com/060795906844/qbotica-qsq-process"
+    
 functionalIdentifier: "qbotica-po"
+
+
+general:
+  maxretries: "3"
+  milisecondsbetweenretries: "30000"
+  
+reconnection:
+  freq: "3000"
+  reconnectionattempts: "3"

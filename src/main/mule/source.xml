@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
-	<flow name="sourceFlow" doc:id="ec33d33e-0663-4233-af7e-45d3360447be" >
+	<flow name="sourceFlow" doc:id="ec33d33e-0663-4233-af7e-45d3360447be" initialState="stopped">
 		<sqs:receivemessages doc:name="Receive messages" doc:id="5f69b6f4-f912-42cf-8b51-f77383d3440d" config-ref="Amazon_SQS_Configuration" queueUrl="${aws.sqs.url}" visibilityTimeoutUnit="MINUTES"/>
 		<ee:transform doc:name="qbotica-po-papi-Receive meassagesflow-logvar" doc:id="8c095f6c-5f67-4053-9823-faadbdd7a4f9" >
 			<ee:message />
@@ -71,7 +71,9 @@ STATUS_FLAG :"N"
 		</ee:transform>
 		<foreach doc:name="For Each" doc:id="5380d4a6-8cda-4883-b582-9e1468a35980" collection="#[payload]">
 			<logger level="INFO" doc:name="Logger" doc:id="de31c9a2-1f76-48e3-a057-50f453e31cd4" message="#[payload]" />
-			<flow-ref doc:name="Flow Reference" doc:id="9fe09bfa-e34f-4fcc-9705-684856299643" name="targateSub_Flow" />
+			<async doc:name="Async" doc:id="c8a3e3e0-96ff-4376-9a44-6b827e7fc619" >
+				<flow-ref doc:name="Flow Reference" doc:id="9fe09bfa-e34f-4fcc-9705-684856299643" name="targateSub_Flow" />
+			</async>
 		</foreach>
 		<logger level="INFO" doc:name="Logger" doc:id="8664e9b2-3d13-4897-86c0-24d106a4238e" message='"end the process"'/>
 	</sub-flow>
