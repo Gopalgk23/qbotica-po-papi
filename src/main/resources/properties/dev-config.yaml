@@ -3,20 +3,20 @@ https:
   port: "8082"
   
 aws:
-  accesskey: "![3IIN7u56LiKQhZz74L0BmW+yUZ6thrAZN60v0hH9LWE=]"
-  secretkey: "![yrsia1GvT4v/f8+49s9JZViHh8/cXKEfJRZh9lcrqBb32Xsp38v/WB+tJIgC9UnG]"
+  accesskey: "![PrCrBZZI6T4wJMoFV50lHzYB+X8Ed9ymGqcdjoyCK3U=]"
+  secretkey: "![zMfqNu0yQHuy0e/Wbm0EAAyLZtF2MSjwZH87kzckM09s32ehituC3DiUL0o1X+BT]"
   regionendpoint: "us-east-1"
  
   sqs:
-    arn: "arn:aws:sqs:us-east-1:060795906844:qbotica-qsq-process"
-    url: "https://sqs.us-east-1.amazonaws.com/060795906844/qbotica-qsq-process"
+    arn: "arn:aws:sqs:us-east-1:484907510455:qubotica-po-sqs"
+    url: "https://sqs.us-east-1.amazonaws.com/484907510455/qubotica-po-sqs"
     
 functionalIdentifier: "qbotica-po"
 
 
-general:
+generic:
   maxretries: "3"
-  milisecondsbetweenretries: "30000"
+  millisecondsbetweenretries: "30000"
   
 reconnection:
   freq: "3000"
