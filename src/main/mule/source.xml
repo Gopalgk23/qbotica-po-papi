@@ -70,7 +70,6 @@ STATUS_FLAG :"N"
 			</ee:message>
 		</ee:transform>
 		<foreach doc:name="For Each" doc:id="5380d4a6-8cda-4883-b582-9e1468a35980" collection="#[payload]">
-			<logger level="INFO" doc:name="Logger" doc:id="de31c9a2-1f76-48e3-a057-50f453e31cd4" message="#[payload]" />
 			<async doc:name="Async" doc:id="c8a3e3e0-96ff-4376-9a44-6b827e7fc619" >
 				<flow-ref doc:name="Flow Reference" doc:id="9fe09bfa-e34f-4fcc-9705-684856299643" name="targateSub_Flow" />
 			</async>
