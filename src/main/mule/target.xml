@@ -6,7 +6,14 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<sub-flow name="targateSub_Flow" doc:id="be501ce1-787c-498d-bd81-0877b60459b2" >
 		<until-successful maxRetries="5" doc:name="Until Successful" doc:id="df25ef72-03d3-4154-9978-1e14bcf725c9" >
-			<http:request method="PUT" doc:name="Request" doc:id="22f17dc6-60c9-45bb-b6f4-ec0250e120a1" config-ref="HTTP_Request_configuration" path="/api/poprocessapi" sendCorrelationId="AUTO" correlationId="#[vars.logvar.correlationId]"/>
+			<http:request method="POST" doc:name="Request" doc:id="22f17dc6-60c9-45bb-b6f4-ec0250e120a1" config-ref="HTTP_Request_configuration" path="/api/poprocessapi" sendCorrelationId="AUTO" correlationId="#[vars.logvar.correlationId]">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : "123456",
+	"client_id" : "123456"
+}]]]></http:headers>
+			</http:request>
 		</until-successful>
 	</sub-flow>
 </mule>
